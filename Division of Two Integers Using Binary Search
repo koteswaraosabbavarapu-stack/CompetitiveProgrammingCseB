@@ -1,0 +1,51 @@
+#include <iostream>
+#include <climits>
+#include <cmath>
+using namespace std;
+
+int divide(int dividend, int divisor) {
+
+    if (dividend == INT_MIN && divisor == -1)
+        return INT_MAX;
+
+    if (dividend == INT_MIN && divisor == 1)
+        return INT_MIN;
+
+    bool negative = (dividend < 0) ^ (divisor < 0);
+
+    long long dvd = llabs((long long)dividend);
+    long long dvs = llabs((long long)divisor);
+
+    long long low = 0, high = dvd;
+
+    while (low <= high) {
+        long long mid = low + (high - low) / 2;
+        long long product = mid * dvs;
+
+        if (product == dvd) {
+            return negative ? -mid : mid;
+        }
+        else if (product < dvd) {
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+    }
+
+    long long ans = negative ? -high : high;
+
+    if (ans > INT_MAX)
+        return INT_MAX;
+    if (ans < INT_MIN)
+        return INT_MIN;
+
+    return (int)ans;
+}
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    int dividend,divisor;
+    cin>>dividend>>divisor;
+    cout<<divide(dividend,divisor);   
+    return 0;
+}
