@@ -1,0 +1,46 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    string s = "";
+    if (!(cin >> s)) return 0;
+    
+    unordered_map<string, int> preSuf;
+    int n = s.size();
+    
+    
+    for (int len = 1; len < n; len++) {
+        preSuf[s.substr(0, len)]++;
+    }
+    
+    
+    for (int len = 1; len <n; len++) {
+        preSuf[s.substr(n - len)]++;
+    }
+    
+    
+    string maxStr = "";
+    int maxLen = 0;
+    
+    for (const auto& [str, count] : preSuf) {
+        if (count > 1) {
+        
+            if ((int)str.size() > maxLen) {
+                maxLen = str.size();
+                maxStr = str;
+            }
+        }
+    }
+
+    if (maxLen > 0) {
+        cout << maxStr;
+    } else {
+        cout << "No repeating prefix/suffix found.\n";
+    }
+    
+    return 0;
+}
