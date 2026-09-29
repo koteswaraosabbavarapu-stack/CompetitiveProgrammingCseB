@@ -1,0 +1,42 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include<climits>
+using namespace std;
+
+int ans=INT_MIN;
+
+bool palin(string& s) {
+    int left = 0;
+    int right = s.length() - 1;
+    
+    while (left < right) {
+        if (s[left] != s[right]) {
+            return false;
+        }
+        left++;
+        right--;
+    }
+    return true;
+}
+void longPal(int i,string s,string sub){
+    if(i==s.size()){
+        if(palin(sub)){
+            ans=max(ans,(int)sub.size());
+        }
+        return;
+    }
+    
+    longPal(i+1,s,sub+s[i]);
+    longPal(i+1,s,sub);
+}
+int main() {
+    string s="";
+    string sub="";
+    cin>>s;
+    longPal(0,s,sub);
+    cout<<ans;
+    return 0;
+}
