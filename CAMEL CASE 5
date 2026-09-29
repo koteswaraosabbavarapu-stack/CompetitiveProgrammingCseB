@@ -1,0 +1,79 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <sstream>
+#include <cctype>
+
+using namespace std;
+
+vector<string> camelCase(vector<string>& ip, string pattern) {
+
+    vector<pair<string, string>> matches;
+    vector<string> ans;
+
+    for (string word : ip) {
+
+        string abbr = "";
+
+        
+        for (char c : word) {
+            if (isupper(c)) {
+                abbr += c;
+            }
+        }
+
+    
+        if (abbr.size() >= pattern.size() &&
+            abbr.substr(0, pattern.size()) == pattern) {
+
+            matches.push_back({abbr, word});
+        }
+    }
+
+    
+    sort(matches.begin(), matches.end());
+
+    for (auto p : matches) {
+        ans.push_back(p.second);
+    }
+
+    return ans;
+}
+
+int main() {
+
+    int n;
+    cin >> n;
+    cin.ignore();
+
+    string line;
+    getline(cin, line);
+
+    vector<string> words;
+    stringstream ss(line);
+
+    string word;
+
+    while (getline(ss, word, ',')) {
+        words.push_back(word);
+    }
+
+    string pattern;
+    cin >> pattern;
+
+    vector<string> ans = camelCase(words, pattern);
+
+    if (ans.empty()) {
+        cout << "No match found";
+    }
+    else {
+        for (int i = 0; i < ans.size(); i++) {
+            cout << ans[i] << " ";
+        }
+    }
+
+    return 0;
+}
