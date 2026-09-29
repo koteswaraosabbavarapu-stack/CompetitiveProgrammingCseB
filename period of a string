@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    string s;
+    if (!(cin >> s)) return 0;
+
+    int n = s.length();
+    vector<int> pi(n, 0);
+
+    
+    for (int i = 1; i < n; i++) {
+        int j = pi[i - 1];
+        while (j > 0 && s[i] != s[j]) {
+            j = pi[j - 1];
+        }
+        if (s[i] == s[j]) {
+            j++;
+        }
+        pi[i] = j;
+    }
+
+   
+    int longest_prefix_suffix = pi[n - 1];
+    int k = n - longest_prefix_suffix;
+
+    
+    if (n % k == 0) {
+        cout << k << "\n";
+    } else {
+        cout << n << "\n";
+    }
+
+    return 0;
+}
