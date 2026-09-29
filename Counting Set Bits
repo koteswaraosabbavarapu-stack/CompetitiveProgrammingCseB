@@ -1,0 +1,21 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int brain(int n){
+    int count=0;
+    while(n){
+        n=n&(n-1);
+        count++;
+    }
+    return count;
+}
+int main() {
+    int n;
+    cin>>n;
+    cout<<brain(n);
+    return 0;
+}
