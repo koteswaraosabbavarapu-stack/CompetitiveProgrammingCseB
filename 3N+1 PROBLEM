@@ -1,0 +1,33 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+int ans=INT_MIN;
+
+int seq(int n,int& count){
+    if(n==1){
+        count+=1;
+        ans=max(ans,count);
+        return ans;
+    }
+    count+=1;
+    if(n%2==0) return seq(n/2,count);
+    
+    return seq(3*n+1,count);
+}
+
+int main() {
+    int a,b;
+    cin>>a>>b;
+    int count=0;
+    for(int i=a;i<=b;i++){
+        seq(i,count);
+        count=0;
+    }  
+    cout<<a<<" "<<b<<" "<<ans;
+    return 0;
+}
