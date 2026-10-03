@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+
+long long extended_gcd(long long a, long long b, long long &x, long long &y) {
+    if (b == 0) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    long long x1, y1;
+    long long d = extended_gcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - y1 * (a / b);
+    return d;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    long long A, B;
+    if (cin >> A >> B) {
+        long long x0, y0;
+        long long D = extended_gcd(A, B, x0, y0);
+
+        long long step_x = B / D;
+        long long step_y = A / D;
+
+        long long best_x = x0;
+        long long best_y = y0;
+        long long min_sum = -1; 
+        for (long long k = -5; k <= 5; ++k) {
+            long long cur_x = x0 + k * step_x;
+            long long cur_y = y0 - k * step_y;
+            
+            long long cur_sum = abs(cur_x) + abs(cur_y);
+
+            if (min_sum == -1 || cur_sum < min_sum) {
+                min_sum = cur_sum;
+                best_x = cur_x;
+                best_y = cur_y;
+            } else if (cur_sum == min_sum) {
+                // Tie-breaker rule: choose the pair where x <= y
+                if (cur_x <= cur_y) {
+                    best_x = cur_x;
+                    best_y = cur_y;
+                }
+            }
+        }
+
+        cout << best_x << " " << best_y << " " << D << "\n";
+    }
+
+    return 0;
+}
