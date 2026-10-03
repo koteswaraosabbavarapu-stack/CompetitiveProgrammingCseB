@@ -1,0 +1,82 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <climits>
+#include <bits/stdc++.h>
+using namespace std;
+
+bool dfs(int node,int sink,vector<vector<int>>& residual,
+         vector<int>& visited,
+         vector<int>& parent){
+     visited[node]=1;
+     if(node==sink) return true;
+     for(int i=0;i<residual.size();i++){
+        if(!visited[i] && residual[node][i]>0){
+            parent[i]=node;
+            if(dfs(i,sink,residual,visited,parent)) return true;
+        }
+     }
+     return false;
+    
+}
+int fordFulkerson(vector<vector<int>>& capacity,int source,int sink){
+    int n=capacity.size();
+    vector<vector<int>> residual=capacity;
+    vector<int> parent(n);
+    int maxPath=0;
+    while(true){
+        vector<int> visited(n,0);
+        fill(parent.begin(),parent.end(),-1);
+        
+        bool found=dfs(source,sink,residual,visited,parent);
+        if(!found) break;
+        // Find bottleneck capacity
+        
+        int pathFlow=INT_MAX;
+        int v=sink;
+        while(v!=source){
+            int u=parent[v];
+            pathFlow=min(pathFlow,residual[u][v]);
+            v=u;
+        }
+        v=sink;
+        
+        while(v!=source){
+            int u=parent[v];
+            residual[u][v]-=pathFlow;
+            residual[v][u]+=pathFlow;
+            v=u;
+        }
+        maxPath+=pathFlow;
+    }
+    return maxPath;
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int V, E;
+    if (!(cin >> V >> E)) return 0;
+    vector<vector<int>> capacity(V,vector<int>(V, 0));
+
+   
+
+    for (int i = 0; i < E; i++) {
+
+        int u, v, cap;
+
+        cin >> u >> v >> cap;
+
+        capacity[u][v] += cap;
+    }
+    int source=0;
+    int sink=V-1;
+    int answer = fordFulkerson(capacity,
+                                source,
+                                sink);
+
+    cout << answer << endl;
+    return 0;
+  }
