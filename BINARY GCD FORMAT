@@ -1,0 +1,54 @@
+#include <iostream>
+
+// Function to find GCD using Stein's Algorithm
+long long binary_gcd(long long a, long long b) {
+    if (a == 0) return b;
+    if (b == 0) return a;
+
+    // Count trailing zeros for 'a'
+    int shift_a = 0;
+    while ((a & 1) == 0) {
+        a >>= 1;
+        shift_a++;
+    }
+
+    // Count trailing zeros for 'b'
+    int shift_b = 0;
+    while ((b & 1) == 0) {
+        b >>= 1;
+        shift_b++;
+    }
+
+    // Find the minimum shift (common factors of 2)
+    int common_shift = (shift_a < shift_b) ? shift_a : shift_b;
+
+    // Loop until b becomes 0
+    while (b != 0) {
+        // Remove all trailing zeros from b
+        while ((b & 1) == 0) {
+            b >>= 1;
+        }
+
+        // Custom swap if a > b to ensure we always do b - a
+        if (a > b) {
+            long long temp = a;
+            a = b;
+            b = temp;
+        }
+        
+        // Subtract the smaller from the larger
+        b -= a;
+    }
+
+    // Restore the common factors of 2
+    return a << common_shift;
+}
+
+int main() {
+    long long a, b;
+    if (std::cin >> a >> b) {
+        std::cout << binary_gcd(a, b) << "\n";
+    }
+
+    return 0;
+}
